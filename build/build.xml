@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build Drawer" default="build">
+  <!-- Version : date du jour -->
+  <tstamp>
+    <format property="version" pattern="yyyy-MM-dd"/>
+  </tstamp>
+  
+   <!-- Configuration personnelle -->
+  <property name="www" location="/Server/www"/>
+  <property name="www.project" location="${www}/drawer"/>
+  <property name="dir.store.builds" location="/Users/BLAST/Documents/Travail/drawer/builds"/>
+  <property name="dir.git" location="/Users/BLAST/Documents/Travail/git/drawer/drawer"/>
+  
+  <!-- Configuration des path -->
+  <property name="dir.base" location="../"/>
+  <property name="dir.store.base" location="${dir.store.builds}"/>
+  <property name="dir.store.current" location="${dir.store.base}/${version}"/>
+
+  <fileset id="build.files" dir="${dir.base}">
+    <include name="**/*" />
+    <!-- les statics sont concaténé et minifié en deux fichiers : on exclus les fichiers individuels -->
+    <exclude name="**/*.js" />
+    <exclude name="**/*.css" />
+  </fileset>
+
+  <fileset id="git.files" dir="${dir.base}">
+    <include name="**/*" />
+    <exclude name="**/settings/**" />
+    <exclude name="**/*.project" />
+  </fileset>
+  
+  <!--build statics -->
+  <import file="static.build.xml" />
+  <import file="js-files.xml"/>
+  <import file="css-files.xml"/>
+  
+  <!-- Build de l'application -->
+  <target name="build">
+    <!-- Initialisation du build-->
+    <echo>Build de time fly</echo>
+    <echo>Création du dossier de stockage des fichiers ${dir.store.current}</echo>
+    <mkdir dir="${dir.store.current}"></mkdir>
+    
+    <!-- Suppression des fichiers dans la destination du build -->
+    <echo>Suppression de tous les fichiers exsitant dans le dossier</echo>
+    <delete dir="${dir.store.current}" />
+    
+    <!-- Copie des fichiers dans le dossier de build -->
+    <echo>Copie des fichiers dans le dossier de build : ${dir.store.current}</echo>
+    <copy todir="${dir.store.current}" preservelastmodified = "true">
+      <fileset refid="build.files" />
+    </copy>
+    
+    <!-- Build des js -->
+    <echo>Build js</echo>
+    <antcall target="js.build">
+      <param name="dir.dest" value="${dir.store.current}" />
+      <param name="file.dest" value="app.js" />
+      <param name="file.list.id" value="js.files" />
+    </antcall>
+    
+    <!-- Build des css -->
+    <echo>Build css</echo>
+    <antcall target="css.build">
+      <param name="dir.dest" value="${dir.store.current}" />
+      <param name="file.dest" value="style.css" />
+      <param name="file.list.id" value="css.files" />
+    </antcall>
+    
+  </target>
+
+  <!-- Build des static pour developpement -->
+  <target name="build-and-deploy-all-statics" description="Envoi les fichiers app.js et style.css complié sur le server local">
+    <echo>Envoi les fichiers app.js et style.css du module client complié sur le server local</echo>
+    <!-- Build js -->
+    <antcall target="js.build">
+      <param name="dir.dest" value="${www.project}" />
+      <param name="file.dest" value="app.js" />
+      <param name="file.list.id" value="js.files" />
+    </antcall>
+    <!-- Build des css client -->
+    <echo>Build client css</echo>
+    <antcall target="css.build">
+      <param name="dir.dest" value="${www.project}" />
+      <param name="file.dest" value="style.css" />
+      <param name="file.list.id" value="css.files" />
+    </antcall>
+
+  </target>
+  
+  <!-- To git repo -->
+  <target name="send to git repo" description="Envoi les fichiers complié et source dans le repo git">
+    
+    <!-- Copie des fichiers dans le repo git -->
+    <echo>Copie des fichiers dans le dossier de build : ${dir.git}</echo>
+    <copy todir="${dir.git}" preservelastmodified = "true">
+      <fileset refid="git.files" />
+    </copy>
+    
+    <!-- Build des js -->
+    <echo>Build js</echo>
+    <antcall target="js.build">
+      <param name="dir.dest" value="${dir.git}" />
+      <param name="file.dest" value="app.js" />
+      <param name="file.list.id" value="js.files" />
+    </antcall>
+    
+    <!-- Build des css -->
+    <echo>Build css</echo>
+    <antcall target="css.build">
+      <param name="dir.dest" value="${dir.git}" />
+      <param name="file.dest" value="style.css" />
+      <param name="file.list.id" value="css.files" />
+    </antcall>
+    
+  </target>
+  
+</project>

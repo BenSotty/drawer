@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="js files">
+<filelist id="js.files" dir="${dir.base}">
+  <!-- Librairies js -->
+  <file name="${dir.base}/js/vendor/jquery-2.1.4.min.js"/>
+
+  <!-- Drawer js -->
+  <file name="${dir.base}/js/Rectangle.js"/>
+  <file name="${dir.base}/js/RectangleView.js"/>
+  <file name="${dir.base}/js/drawer.js"/>
+  <file name="${dir.base}/js/drawer.utils.js"/>
+
+</filelist>
+</project>

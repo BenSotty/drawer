@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="file minification">
+  
+  <import file="static.build.xml" />
+  
+  <!-- Minify given js file -->
+  <target name="minify js" description="Minify js file">
+    <antcall target="js.minify">
+      <param name="dir" value="${dir}" />
+      <param name="file" value="${file}" />
+    </antcall>
+  </target>
+  
+  <!-- Minify given css file -->
+  <target name="minify css" description="Minify css file">
+    <echo>Minification du fichier css ${dir}/${file}</echo>
+    <antcall target="css.minify">
+      <param name="dir" value="${dir}" />
+      <param name="file" value="${file}" />
+    </antcall>
+  </target>
+
+</project>

@@ -1,0 +1,5 @@
+.rectangle{position:fixed;background-color:black}
+.user-msg{padding:20px;text-align:center;background-color:#ddd;font-size:14px;position:fixed;bottom:15px;left:15px;opacity:.8;font-family:monospace}
+.user-msg.success{color:green}
+.user-msg.error{color:red}
+.indicator{position:fixed;background-color:#ddd;height:20px;width:20px;border-radius:20px;z-index:1}

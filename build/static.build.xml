@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build static">
+  <!-- Use 2.4.7 version : bug on the 2.4.8 -->
+  <property name="yui.path" location="yuicompressor-2.4.7.jar"/>
+  
+  <target name="js.minify">
+    <apply executable="java" parallel="false" dest="${dir}">
+      <fileset dir="${dir}" includes="${file}"/>
+      <arg line="-jar"/>
+      <arg path="${yui.path}"/>
+      <srcfile/>
+      <arg line="-o"/>
+      <mapper type="glob" from="*.js" to="*-min.js"/>
+      <targetfile/>
+    </apply>
+  </target>
+  
+  <target name="css.minify">
+    <apply executable="java" parallel="false" dest="${dir}">
+      <fileset dir="${dir}" includes="${file}"/>
+      <arg line="-jar"/>
+      <arg path="${yui.path}"/>
+      <arg line="--line-break 0"/>
+      <srcfile/>
+      <arg line="-o"/>
+      <mapper type="glob" from="*.css" to="*-min.css"/>
+      <targetfile/>
+    </apply>
+  </target>
+
+  <target name="js.build">
+    <echo>Conactenation d'une liste de fichier js puis de minification du fichier de destiation</echo>
+    <concat destfile="${dir.dest}/${file.dest}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+      <filelist refid="${file.list.id}" />
+    </concat>
+    <antcall target="js.minify">
+      <param name="dir" value="${dir.dest}" />
+      <param name="file" value="${file.dest}" />
+    </antcall>
+  </target>
+  
+  <target name="css.build">
+    <echo>Conactenation d'une liste de fichier css</echo>
+    <concat destfile="${dir.dest}/${file.dest}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+      <filelist refid="${file.list.id}" />
+    </concat>
+    <antcall target="css.minify">
+      <param name="dir" value="${dir.dest}" />
+      <param name="file" value="${file.dest}" />
+    </antcall>
+  </target>
+  
+</project>

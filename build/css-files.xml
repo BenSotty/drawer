@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="css files">
+<filelist id="css.files" dir="${dir.base}">
+  <!-- Time Fly css -->
+  <file name="${dir.base}/css/drawer.css"/>
+</filelist>
+</project>
